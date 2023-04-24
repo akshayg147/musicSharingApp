@@ -19,11 +19,12 @@
 				<option value="private">Private</option>
 				<option value="protected">Protected</option>
 			</select>
+			<input type="email" id="allowed_emails" name="allowed_emails" multiple>
 			<button type="submit">Upload</button>
 		</form>
 	<a href="profile"><button>back to home</button></a>
 	</div>
-	<script>
+<script>
 $(document).ready(function() {
     $("#access-level").change(function() {
         if ($(this).val() == "private") {

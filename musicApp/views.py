@@ -3,9 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, auth
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from .forms import SignUpForm,MusicForm
 from .models import Music
-from django.urls import reverse
 
 
 def login_view(request):
@@ -47,32 +45,30 @@ def signup_view(request):
             return redirect('signup')
     return render(request, 'signup.html')
 
-
+@login_required(login_url="/")
 def logout_view(request):
     logout(request)
-    return redirect('signin')
+    return redirect('/')
 
-@login_required
+@login_required(login_url="/")
 def upload_music(request):
     if request.method == "POST":
         print('i am in')
         title = request.POST['title']
         file = request.FILES.get('file')
-        print(file)
         access_level = request.POST['access-level']
-        allowed_emails = request.POST.get('allowed_emails')
-        if not file:
-            return redirect('profile')
-        if allowed_emails:
-            music = Music.objects.create(title=title,file=file,visibility=access_level,allowed_emails=allowed_emails)
+        print(access_level)
+        allowed_emails = request.POST.get('allowed_emails').split(',')
+        if access_level=='protected':
+            print(allowed_emails)
+            music = Music.objects.create(user=request.user,title=title,file=file,visibility=access_level,allowed_emails=allowed_emails)
         else:
-            print('its done')
             music = Music.objects.create(user=request.user,title=title, file=file, visibility=access_level)
         music.save()
         return redirect('profile')
     return render(request, 'upload.html')
 
-@login_required
+@login_required(login_url='/')
 def profile(request):
     public_music = Music.objects.filter(visibility='public')
     protected_music = Music.objects.filter(visibility='protected', allowed_emails__contains=request.user.email)
