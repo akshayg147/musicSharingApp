@@ -10,7 +10,7 @@
 		<p><strong>{{ msg }}</strong></p>
 	{% endif %}
 
-	<form method="post" action = "profile">
+	<form method="post" action = "{% url 'login' %}?next=/profile/">
 		{% csrf_token %}
 		<label for="email">Email:</label>
 		<input type="email" id="email" name="email">

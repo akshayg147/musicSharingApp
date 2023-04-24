@@ -5,18 +5,23 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import SignUpForm,MusicForm
 from .models import Music
+from django.urls import reverse
+
 
 def login_view(request):
     if request.method == 'POST':
+
         email = request.POST['email']
         password = request.POST['password']
-        user = auth.authenticate(email=email, password=password)
+        user = auth.authenticate(username=email,email=email, password=password)
+        print(user)
         if user is not None:
+            print(1)
             auth.login(request, user)
             return redirect('profile')
         else:
             messages.info(request, 'userid or password is wrong')
-            return redirect('signin')
+            return redirect('/')
     else:
         return render(request, 'signin.html')
 
@@ -30,8 +35,11 @@ def signup_view(request):
             if User.objects.filter(email=email).exists():
                 messages.error(request, 'Email already exists')
                 return redirect('signup')
+            elif User.objects.filter(email=email).exists():
+                messages.error(request,'Email already exists')
+                return redirect('/')
             else:
-                user = User.objects.create_user(username=name, email=email, password=password)
+                user = User.objects.create_user(username=email,email=email, password=password)
                 user.save()
                 return redirect('/')
         else:
@@ -52,7 +60,7 @@ def upload_music(request):
         music.user = request.user
         music.save()
         return redirect('profile')
-    return render(request, 'upload_music.html', {'form': form})
+    return render(request, 'upload.html', {'form': form})
 
 @login_required
 def profile(request):
