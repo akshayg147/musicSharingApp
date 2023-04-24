@@ -54,13 +54,23 @@ def logout_view(request):
 
 @login_required
 def upload_music(request):
-    form = MusicForm(request.POST or None, request.FILES or None)
-    if form.is_valid():
-        music = form.save(commit=False)
-        music.user = request.user
+    if request.method == "POST":
+        print('i am in')
+        title = request.POST['title']
+        file = request.FILES.get('file')
+        print(file)
+        access_level = request.POST['access-level']
+        allowed_emails = request.POST.get('allowed_emails')
+        if not file:
+            return redirect('profile')
+        if allowed_emails:
+            music = Music.objects.create(title=title,file=file,visibility=access_level,allowed_emails=allowed_emails)
+        else:
+            print('its done')
+            music = Music.objects.create(user=request.user,title=title, file=file, visibility=access_level)
         music.save()
         return redirect('profile')
-    return render(request, 'upload.html', {'form': form})
+    return render(request, 'upload.html')
 
 @login_required
 def profile(request):
