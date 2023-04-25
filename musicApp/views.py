@@ -4,7 +4,7 @@ from django.contrib.auth.models import User, auth
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Music
-
+from django.core.files.storage import default_storage
 
 def login_view(request):
     if request.method == 'POST':
@@ -47,13 +47,12 @@ def signup_view(request):
 
 @login_required(login_url="/")
 def logout_view(request):
-    logout(request)
+    auth.logout(request)
     return redirect('/')
 
 @login_required(login_url="/")
 def upload_music(request):
     if request.method == "POST":
-        print('i am in')
         title = request.POST['title']
         file = request.FILES.get('file')
         access_level = request.POST['access-level']
@@ -63,7 +62,7 @@ def upload_music(request):
             print(allowed_emails)
             music = Music.objects.create(user=request.user,title=title,file=file,visibility=access_level,allowed_emails=allowed_emails)
         else:
-            music = Music.objects.create(user=request.user,title=title, file=file, visibility=access_level)
+            music = Music.objects.create(user=request.user,title=title,file=file, visibility=access_level)
         music.save()
         return redirect('profile')
     return render(request, 'upload.html')
