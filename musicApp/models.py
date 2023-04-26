@@ -11,7 +11,7 @@ class Music(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
-    file = models.FileField(upload_to='music')
+    file = models.FileField(upload_to='music/')
     visibility = models.CharField(max_length=20, choices=VISIBILITY_CHOICES, default='public')
     allowed_emails = models.TextField(blank=True)
 

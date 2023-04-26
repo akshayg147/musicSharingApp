@@ -56,10 +56,14 @@ def upload_music(request):
         title = request.POST['title']
         file = request.FILES.get('file')
         access_level = request.POST['access-level']
-        print(access_level)
         allowed_emails = request.POST.get('allowed_emails').split(',')
+
         if access_level=='protected':
-            print(allowed_emails)
+            for email in allowed_emails:
+                if User.objects.filter(email=email).exists():
+                    continue
+                else:
+                    return render(request, 'upload.html', {'msg': 'Upload failed, one or more Email does not exist in the list'})
             music = Music.objects.create(user=request.user,title=title,file=file,visibility=access_level,allowed_emails=allowed_emails)
         else:
             music = Music.objects.create(user=request.user,title=title,file=file, visibility=access_level)

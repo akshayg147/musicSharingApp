@@ -1,4 +1,7 @@
-<!DOCTYPE html>
+
+{% load static %}
+
+<!--<!DOCTYPE html>-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,16 +13,22 @@
 <h2>Public Music</h2>
 <ul>
 {% for music in public_music %}
-    <li>{{ music.title }}</li>
+    <li>{{ music.title }} :- <br>
+        <audio style="width: 100%;">
+         <source src="{% if music.file %} {{ music.file.url }} {% else %} {{music.file}} {% endif %}" type="audio/mp3"/>
+        </audio></li>
 {% empty %}
-    <li>No public music available</li>
+    <li>No public music available:- <br>
 {% endfor %}
 </ul>
 
 <h2>Protected Music</h2>
 <ul>
 {% for music in protected_music %}
-    <li>{{ music.title }}</li>
+    <li>{{ music.title }} :- <br>
+        <audio style="width: 100%;">
+         <source src="{% if music.file %}{{ music.file.url }} {% else %} {{music.file}} {% endif %}" type="audio/mp3"/>
+        </audio></li>
 {% empty %}
     <li>No protected music available</li>
 {% endfor %}
@@ -28,7 +37,11 @@
 <h2>My Music</h2>
 <ul>
 {% for music in user_music %}
-    <li>{{ music.title }}</li>
+    <li>{{ music.title }}:-
+        <audio style="width: 100%;">
+         <source src="{% if music.file %}{{ music.file.url }} {% else %} {{ music.file }} {% endif %}" type="audio/mp3"/>
+        </audio>
+    </li>
 {% empty %}
     <li>No uploaded music available</li>
 {% endfor %}

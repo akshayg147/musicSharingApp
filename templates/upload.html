@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +7,9 @@
 </head>
 <body>
 <div>
+	{% if msg %}
+		<p><strong>{{ msg }}</strong></p>
+	{% endif %}
 		<h3>Upload Your Own Music</h3>
 		<form method="Post" enctype="multipart/form-data">
 			{% csrf_token %}
