@@ -8,13 +8,14 @@
     <title>Profile</title>
 </head>
 <body>
-<h1>My Profile</h1>
+<h1>My Profile <h1 align="left">{{ user.username }}</h1> </h1>
 
 <h2>Public Music</h2>
 <ul>
 {% for music in public_music %}
     <li>{{ music.title }} :- <br>
-        <audio style="width: 100%;">
+        <p>hey</p>
+        <audio controls style="width: 100%;">
          <source src="{% if music.file %} {{ music.file.url }} {% else %} {{music.file}} {% endif %}" type="audio/mp3"/>
         </audio></li>
 {% empty %}
@@ -26,7 +27,8 @@
 <ul>
 {% for music in protected_music %}
     <li>{{ music.title }} :- <br>
-        <audio style="width: 100%;">
+        <audio controls style="width: 100%;">
+
          <source src="{% if music.file %}{{ music.file.url }} {% else %} {{music.file}} {% endif %}" type="audio/mp3"/>
         </audio></li>
 {% empty %}
@@ -38,7 +40,7 @@
 <ul>
 {% for music in user_music %}
     <li>{{ music.title }}:-
-        <audio style="width: 100%;">
+        <audio controls style="width: 100%;">
          <source src="{% if music.file %}{{ music.file.url }} {% else %} {{ music.file }} {% endif %}" type="audio/mp3"/>
         </audio>
     </li>
